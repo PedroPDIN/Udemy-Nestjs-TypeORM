@@ -1,4 +1,4 @@
-import { CoursesService } from './courses.service';
+import { CoursesService } from '../database/courses.service';
 import {
   Body,
   Controller,

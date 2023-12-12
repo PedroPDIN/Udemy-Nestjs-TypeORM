@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CoursesController } from './courses.controller';
-import { CoursesService } from './courses.service';
+import { CoursesService } from '../database/courses.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from './entities/courses.entity';
 import { Tag } from './entities/tags.entity';

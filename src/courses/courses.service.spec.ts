@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
-import { CoursesService } from './courses.service';
+import { CoursesService } from '../database/courses.service';
 import { CreateCourseDTO } from './dto/create-course.dto';
+import { UpdateCourseDTO } from './dto/update-course.dto';
 
 describe('CoursesService unit tests', () => {
   let service: CoursesService;
@@ -52,7 +53,8 @@ describe('CoursesService unit tests', () => {
   it('should create a course', async () => {
     //@ts-expect-error defined part of methods
     service['courseRepository'] = mockCoursesRepository;
-    service['tagsRepository'] = mockTagRepository;
+    //@ts-expect-error defined part of methods
+    service['tagRepository'] = mockTagRepository;
 
     const createCourseDTO: CreateCourseDTO = {
       name: 'test',
@@ -64,5 +66,53 @@ describe('CoursesService unit tests', () => {
 
     expect(mockCoursesRepository.save).toHaveBeenCalled(); // espera que a método save tenha sido chamado.
     expect(expectOutputCourses).toStrictEqual(newCourse); // testa se os objetos têm a mesma estrutura e tipos.
+  });
+
+  it('should list all courses', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCoursesRepository;
+
+    const courses = await service.findAll();
+    expect(mockCoursesRepository.find).toHaveBeenCalled();
+    expect(expectOutputCourses).toStrictEqual(courses);
+  });
+
+  it('should gets a courses by id', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCoursesRepository;
+
+    const course = await service.findOne(id);
+    expect(mockCoursesRepository.findOne).toHaveBeenCalled();
+    expect(expectOutputCourses).toStrictEqual(course);
+  });
+
+  it('should update a course', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCoursesRepository;
+    //@ts-expect-error defined part of methods
+    service['tagRepository'] = mockTagRepository;
+
+    const updateCourseDTO: UpdateCourseDTO = {
+      name: 'test',
+      description: 'test description',
+      tags: ['nestjs'],
+    };
+
+    const course = await service.update(id, updateCourseDTO);
+
+    expect(mockCoursesRepository.preload).toHaveBeenCalled(); // espera que a método save tenha sido chamado.
+    expect(mockCoursesRepository.save).toHaveBeenCalled(); // espera que a método save tenha sido chamado.
+    expect(expectOutputCourses).toStrictEqual(course); // testa se os objetos têm a mesma estrutura e tipos.
+  });
+
+  it('should delete a course', async () => {
+    //@ts-expect-error defined part of methods
+    service['courseRepository'] = mockCoursesRepository;
+
+    const courseRemove = await service.remove(id);
+
+    expect(mockCoursesRepository.findOne).toHaveBeenCalled(); // espera que a método save tenha sido chamado.
+    expect(mockCoursesRepository.remove).toHaveBeenCalled(); // espera que a método save tenha sido chamado.
+    expect(expectOutputCourses).toStrictEqual(courseRemove); // testa se os objetos têm a mesma estrutura e tipos.
   });
 });
